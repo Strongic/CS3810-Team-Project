@@ -100,9 +100,21 @@ def get_all_users():
 if __name__ == "__main__":
     init_account_db()
 
-    print(register_user("Sseth", "password123", "Sseth", "User"))
-    print(login_user("Sseth", "password123"))
-    print(login_user("Sseth", "wrongpassword"))
+    print("=== Create New User ===")
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+    first_name = input("Enter first name: ")
+    last_name = input("Enter last name: ")
+
+    success, message = register_user(username, password, first_name, last_name)
+    print(message)
+
+    print("\n=== Login Test ===")
+    login_user_input = input("Enter username to login: ")
+    login_pass_input = input("Enter password: ")
+
+    success, message = login_user(login_user_input, login_pass_input)
+    print(message)
 
     print("\nAll users:")
     for user in get_all_users():
