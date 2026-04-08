@@ -2,6 +2,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 # Need to install hashing package via using: pip install werkzeug or python -m pip install werkzeug
 # Then to run it do: python account_logic.py
+# once it runs, create username, password, first/last name. and retype and test to see if it works
 
 DB_NAME = "account_db.sqlite"
 
