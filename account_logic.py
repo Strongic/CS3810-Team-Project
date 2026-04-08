@@ -101,22 +101,46 @@ def get_all_users():
 if __name__ == "__main__":
     init_account_db()
 
-    print("=== Create New User ===")
-    username = input("Enter username: ")
-    password = input("Enter password: ")
-    first_name = input("Enter first name: ")
-    last_name = input("Enter last name: ")
+    while True:
+        print("\n=== Menu ===")
+        print("1. Register")
+        print("2. Login")
+        print("3. View Users")
+        print("4. Exit")
 
-    success, message = register_user(username, password, first_name, last_name)
-    print(message)
+        choice = input("Choose an option: ")
 
-    print("\n=== Login Test ===")
-    login_user_input = input("Enter username to login: ")
-    login_pass_input = input("Enter password: ")
+        if choice == "1":
+            print("\n=== Register ===")
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+            first_name = input("Enter first name: ")
+            last_name = input("Enter last name: ")
 
-    success, message = login_user(login_user_input, login_pass_input)
-    print(message)
+            success, message = register_user(username, password, first_name, last_name)
+            print(message)
 
-    print("\nAll users:")
-    for user in get_all_users():
-        print(dict(user))
+        elif choice == "2":
+            print("\n=== Login ===")
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+
+            success, message = login_user(username, password)
+            print(message)
+
+        elif choice == "3":
+            print("\n=== All Users ===")
+            users = get_all_users()
+
+            if not users:
+                print("No users found.")
+            else:
+                for user in users:
+                    print(dict(user))
+
+        elif choice == "4":
+            print("Exiting program...")
+            break
+
+        else:
+            print("Invalid option. Try again.")
