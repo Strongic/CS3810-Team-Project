@@ -1,3 +1,4 @@
+# create relational databse using flask-squlalchemy which is an ORM (object relational mapper) that turns classess into SQL
 from . import db
 
 # junction table for many-to-many relationship
@@ -12,7 +13,7 @@ user_books = db.Table('user_books',
 # nullable=false ensures everyone has a username in the table.
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Stirng(80), unique=True, nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
     
     #create link between users and books through junction table
     collection = db.relationship('Book', secondary=user_books, backref='owners')
@@ -20,6 +21,6 @@ class User(db.Model):
 #mapping class to database named 'Book'.
 class Book(db.Model):
     book_id = db.Column(db.Integer, primary_key=True)
-    google_id = db.Column()
-    title = db.Column()
-    author = db.Column()
+    google_id = db.Column(db.String(100), unique=True, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    authors = db.Column(db.String(200))
