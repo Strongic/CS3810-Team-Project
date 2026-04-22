@@ -1,12 +1,12 @@
-#Instructions on how to demo
+# Instructions on how to demo
 
-ENSURE you are running a venv and installed the requirements BEFORE attempting to run the demo. https://docs.python.org/3/library/venv.html
+## ENSURE you are running a venv and installed the requirements BEFORE attempting to run the demo. https://docs.python.org/3/library/venv.html
 
 
 Make sure you are at the root of the project directory and then run:
-python -m venv
-source venv/bin/activate
-pip install -r requirements
+* python -m venv
+* source venv/bin/activate
+* pip install -r requirements
 
 
 To test the querying on your local machine, run 'run.py' with a manual query such as:
@@ -14,9 +14,9 @@ To test the querying on your local machine, run 'run.py' with a manual query suc
 
 
 For an ERD demonstration:
-1. run 'seed.py'
-2. run 'seed_test.py'
-3. Open up the library.db in SQLite browser to view databases and ERD.
+* run 'seed.py'
+* run 'seed_test.py'
+* Open up the library.db in SQLite browser to view databases and ERD.
 
 seed.py will load dummy data into our databases; the User database will fill with 5 users, 50 books will be fetched from our google books API and loaded inside the Book database.
 
