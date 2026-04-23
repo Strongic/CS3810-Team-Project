@@ -1,5 +1,6 @@
 # Combine services.py and models.py. Check database and adds the connection
 from flask import Blueprint, request, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
 from .models import db, User, Book
 from .services import fetch_books_from_api
 
@@ -10,8 +11,7 @@ def login():
     data = request.get_json()
     user = User.query.filter_by(username=data.get('username')).first()
 
-
-    if user and user.password == data.get('password'):
+    if user and check_password_hash(user.password_hash, data.get('password')):
         return jsonify({
             "user_id": user.user_id,
             "username": user.username
@@ -23,12 +23,14 @@ def login():
 def register():
     data = request.get_json()
     username = data.get('username')
-    password = data.get('password') # no hashing yet
+    password = data.get('password')
 
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "User already exists"}), 400
 
-    new_user = User(username=username, password=password)
+    hashed_password = generate_password_hash(password)
+
+    new_user = User(username=username, password_hash=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
