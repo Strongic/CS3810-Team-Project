@@ -12,6 +12,31 @@ def search_books_google(query):
         return response.json()
     else:
         raise Exception(f"search failed: {response.status_code}")
+    
+# send registration data to backend
+def register_user(username, password):
+    payload = {"username": username, "password": password}
+    try:
+        response = requests.post(f"{BASE_URL}/register", json=payload)
+        if response.status_code == 201:
+            return True, "Account created successfully!"
+        else:
+            error_msg = response.json().get("error", "Registration failed")
+            return False, error_msg
+    except Exception as e:
+        return False, str(e)
+    
+
+# hits route to remove a book from users collection
+def return_book_for_user(user, book):
+    payload = {
+        "user_id": user['user_id'],
+        "book_id": book.get('book_id')
+    }
+    response = requests.post(f"{BASE_URL}/collection/remove", json=payload)
+    if response.status_code == 200:
+        return True, "Book returned successfully!"
+    return False, "Could not return book"
 
 # hits /login route
 def login_user(username, password):
@@ -20,7 +45,7 @@ def login_user(username, password):
         response = requests.post(f"{BASE_URL}/login", json=payload)
         if response.status_code == 200:
             return True, response.json()
-        return False, response.json("error", "Login failed")
+        return False, response.json().get("error", "Login failed")
     except Exception as e:
         return False, str(e)
     
