@@ -1,9 +1,46 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sqlite3
-# import requests
+import requests
  
- 
+BASE_URL = "http://127.0.0.1:5000"
+
+# hits flask /search route
+def search_books_google(query):
+    response = requests.get(f"{BASE_URL}/search", params={"q": query})
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"search failed: {response.status_code}")
+
+# hits /login route - needs to be built
+def login_user(username, password):
+    payload = {"username": username, "password": password}
+    try:
+        response = requests.post(f"{BASE_URL}/login", json=payload)
+        if response.status_code == 200:
+            return True, response.json()
+        return False, response.json("error", "Login failed")
+    except Exception as e:
+        return False, str(e)
+    
+# hits route for adding book to user's collection
+def borrow_book_for_user(user, book):
+    payload = {
+        "user_id": user['user_id'],
+        "book_id": book['book_id']
+    }
+    response = requests.post(f"{BASE_URL}/collection/add", json=payload)
+    if response.status_code == 200:
+        return True, "Book added to your collection!"
+    return False, "Could not add book to collection."
+
+
+
+
+
+
+
 
 # Temporary implementations were removed, the functions just need to be redefined (hopefully) 
 
@@ -48,8 +85,8 @@ class LibraryApp(tk.Tk):
  
 
     def _build_frames(self):
-        self.auth_frame = ttk.Frame(self, padding=20)
-        self.main_frame = ttk.Frame(self, padding=12)
+        self.auth_frame = ttk.Frame(self, padding=20) # authentication page
+        self.main_frame = ttk.Frame(self, padding=12) # main library page
 
         for frame in (self.auth_frame, self.main_frame):
             frame.grid(row=0, column=0, sticky="nsew")
