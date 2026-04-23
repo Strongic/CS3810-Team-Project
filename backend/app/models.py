@@ -14,6 +14,7 @@ user_books = db.Table('user_books',
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     
     #create link between users and books through junction table
     collection = db.relationship('Book', secondary=user_books, backref='owners')

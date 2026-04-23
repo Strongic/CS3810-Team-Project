@@ -11,11 +11,12 @@ def login():
     user = User.filter_by(username=data.get('username')).first()
 
 
-    if user:
+    if user and user.password == data.get('password'):
         return jsonify({
             "user_id": user.user_id,
             "username": user.username
-        })
+        }), 200
+    
     return jsonify({"error": "Invalid credentials"}), 401
 
 @main.route('/register', methods=['POST'])
@@ -27,7 +28,7 @@ def register():
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "User already exists"}), 400
 
-    new_user = User(username=username)
+    new_user = User(username=username, password=password)
     db.session.add(new_user)
     db.session.commit()
 
