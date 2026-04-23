@@ -33,10 +33,15 @@ def return_book_for_user(user, book):
         "user_id": user['user_id'],
         "book_id": book.get('book_id')
     }
-    response = requests.post(f"{BASE_URL}/collection/remove", json=payload)
-    if response.status_code == 200:
-        return True, "Book returned successfully!"
-    return False, "Could not return book"
+    try:
+        response = requests.post(f"{BASE_URL}/collection/remove", json=payload)
+        if response.status_code == 200:
+            return True, response.json().get("message")
+        else:
+            return False, response.json().get("error", "Could not return book.")
+    except Exception as e:
+        return False, str(e)
+
 
 # hits /login route
 def login_user(username, password):

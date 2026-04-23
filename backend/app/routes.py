@@ -110,3 +110,22 @@ def add_to_collection():
         return jsonify({"message": "Book added to your collection!"}), 200
     
     return jsonify({"message": "Book is already in your collection."}), 200
+
+
+@main.route('/collection/remove', methods=['POST'])
+def remove_from_collection():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    book_id = data.get('book_id')
+
+    user = User.query.get(user_id)
+    book = Book.query.get(book_id)
+
+    if not user or not book:
+        return jsonify({"error": "User or Book not found"}), 404
+    
+    if book in user.collection:
+        user.collection.remove(book)
+        db.session.commit()
+        return jsonify({"message": "Book returned successfully!"}), 200
+    return jsonify({"error": "This book is not in your collection."}), 400
