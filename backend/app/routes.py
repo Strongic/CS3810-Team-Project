@@ -38,11 +38,35 @@ def register():
 def home():
     return {"message": "Library System API is Up and Running!"}
 
+# @main.route('/search', methods=['GET'])
+# def search():
+#     query = request.args.get('q')
+
+#     results = fetch_books_from_api(query)
+#     return jsonify(results)
+
 @main.route('/search', methods=['GET'])
 def search():
-    query = request.args.get('q')
+    query = request.args.get('q', '').lower()
+    
+    # This searches your local database for titles or authors that match the query
+    books = Book.query.filter(
+        (Book.title.ilike(f'%{query}%')) | 
+        (Book.authors.ilike(f'%{query}%'))
+    ).all()
 
-    results = fetch_books_from_api(query)
+    # Convert the SQLAlchemy objects into a list of dictionaries for the UI
+    results = []
+    for b in books:
+        results.append({
+            "book_id": b.book_id,
+            "title": b.title,
+            "authors": b.authors,
+            "google_id": b.google_id,
+            "genre": "General",  # Defaulting since we didn't seed genres
+            "description": "A local library book." # Defaulting for now
+        })
+    
     return jsonify(results)
 
 
