@@ -305,19 +305,26 @@ class LibraryApp(tk.Tk):
     def show_book_details(self, book):
         self.details_text.delete("1.0", tk.END)
 
+
         details = (
-            f"Title: {book['title']}\n\n"
-            f"Authors: {book['authors']}\n\n"
-            f"Genre: {book['genre']}\n\n"
-            f"Publisher: {book['publisher']}\n\n"
-            f"Published Date: {book['published_date']}\n\n"
-            f"ISBN: {book['isbn']}\n\n"
-            f"Page Count: {book['page_count']}\n\n"
-            f"{book['external_access_note']}\n\n"
-            f"Info Link: {book['info_link'] or 'N/A'}\n\n"
-            f"Description:\n{book['description']}\n\n"
-            f"Borrow Status in Project DB: [VALUE NEEDED]\n"
-        )
+                f"Title: {book.get('title', 'N/A')}\n\n"
+                f"Authors: {book.get('authors', 'Unknown')}\n\n"
+                f"Google ID: {book.get('google_id', 'N/A')}\n\n"
+                f"Description: {book.get('description', 'No description available.')}\n"
+            )
+        # details = (
+        #     f"Title: {book['title']}\n\n"
+        #     f"Authors: {book['authors']}\n\n"
+        #     f"Genre: {book['genre']}\n\n"
+        #     f"Publisher: {book['publisher']}\n\n"
+        #     f"Published Date: {book['published_date']}\n\n"
+        #     f"ISBN: {book['isbn']}\n\n"
+        #     f"Page Count: {book['page_count']}\n\n"
+        #     f"{book['external_access_note']}\n\n"
+        #     f"Info Link: {book['info_link'] or 'N/A'}\n\n"
+        #     f"Description:\n{book['description']}\n\n"
+        #     f"Borrow Status in Project DB: [VALUE NEEDED]\n"
+        # )
 
         self.details_text.insert(tk.END, details)
 
