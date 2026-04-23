@@ -1,8 +1,10 @@
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-# Need to install hashing package via using: pip install werkzeug or python -m pip install werkzeug
-# Then to run it do: python account_logic.py
-# once it runs, create username, password, first/last name. and retype and test to see if it works
+
+# Need to install hashing package:
+# pip install werkzeug
+# or
+# python -m pip install werkzeug
 
 DB_NAME = "account_db.sqlite"
 
@@ -78,7 +80,14 @@ def login_user(username, password):
         return False, "User not found."
 
     if check_password_hash(user["password_hash"], password):
-        return True, f"Login successful. Welcome, {user['username']}."
+        user_data = {
+            "user_id": user["user_id"],
+            "username": user["username"],
+            "first_name": user["first_name"],
+            "last_name": user["last_name"]
+        }
+
+        return True, user_data
 
     return False, "Invalid password."
 
@@ -125,8 +134,13 @@ if __name__ == "__main__":
             username = input("Enter username: ")
             password = input("Enter password: ")
 
-            success, message = login_user(username, password)
-            print(message)
+            success, result = login_user(username, password)
+
+            if success:
+                print(f"Login successful. Welcome, {result['username']}.")
+                print(result)
+            else:
+                print(result)
 
         elif choice == "3":
             print("\n=== All Users ===")
