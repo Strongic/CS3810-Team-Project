@@ -8,7 +8,7 @@ main = Blueprint('main', __name__)
 @main.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    user = User.filter_by(username=data.get('username')).first()
+    user = User.query.filter_by(username=data.get('username')).first()
 
 
     if user and user.password == data.get('password'):

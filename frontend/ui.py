@@ -45,7 +45,7 @@ def login_user(username, password):
         response = requests.post(f"{BASE_URL}/login", json=payload)
         if response.status_code == 200:
             return True, response.json()
-        return False, response.json().get("error", "Login failed")
+        return False, response.json("error", "Login failed")
     except Exception as e:
         return False, str(e)
     
