@@ -1,0 +1,5 @@
+#Environment variables
+.env
+
+.instance
+.DS_Store

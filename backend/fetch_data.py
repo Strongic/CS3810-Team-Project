@@ -1,11 +1,23 @@
 import os
+import sqlite3
 import requests
 from dotenv import load_dotenv
 
 #load environment variables for api key
 load_dotenv()
-
 API_KEY = os.getenv('GOOGLE_BOOKS_API_KEY')
+
+def init_db():
+    conn = sqlite3.connect('library.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Users (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL
+    )''')
+
+
+    
 
 def search_books(query):
     url = f"https://www.googleapis.com/books/v1/volumes"
