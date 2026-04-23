@@ -5,6 +5,20 @@ from .services import fetch_books_from_api
 
 main = Blueprint('main', __name__)
 
+@main.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.filter_by(username=data.get('username')).first()
+
+
+    #simple check atm, no hashing yet
+    if user:
+        return jsonify({
+            "user_id": user.user_id,
+            "username": user.username
+        })
+    return jsonify({"error": "Invvalid credentials"}), 401
+
 @main.route('/')
 def home():
     return {"message": "Library System API is Up and Running!"}

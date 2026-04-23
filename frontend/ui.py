@@ -13,7 +13,7 @@ def search_books_google(query):
     else:
         raise Exception(f"search failed: {response.status_code}")
 
-# hits /login route - needs to be built
+# hits /login route
 def login_user(username, password):
     payload = {"username": username, "password": password}
     try:
