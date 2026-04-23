@@ -38,6 +38,8 @@ def register():
 def home():
     return {"message": "Library System API is Up and Running!"}
 
+
+"""This is for searching using the API directly"""
 # @main.route('/search', methods=['GET'])
 # def search():
 #     query = request.args.get('q')
@@ -45,6 +47,8 @@ def home():
 #     results = fetch_books_from_api(query)
 #     return jsonify(results)
 
+
+"""This is for searching using seed.py"""
 @main.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '').lower()
@@ -70,24 +74,39 @@ def search():
     return jsonify(results)
 
 
-@main.route('/save-book', methods=['POST'])
-def save_book():
-    data = request.json
+@main.route('/collection/add', methods=['POST'])
+def add_to_collection():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    
+    # We check for book_id (from our DB) or google_id (from the API)
+    book_id = data.get('book_id')
+    google_id = data.get('google_id')
 
-    #check if book already exists locally
-    book = Book.query.filter_by(google_id=data['id']).first()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # 1. Find the book in our database
+    if book_id:
+        book = Book.query.get(book_id)
+    else:
+        book = Book.query.filter_by(google_id=google_id).first()
+
+    # 2. If the book doesn't exist yet (e.g. from a fresh API search), create it
     if not book:
         book = Book(
-            google_id = data['id'],
-            title = data['volumeInfo']['title'],
-            authors = ", ".join(data['volumeInfo'].get('authors', []))
+            google_id=google_id,
+            title=data.get('title'),
+            authors=data.get('authors')
         )
         db.session.add(book)
-    
-    # link to user
-    user = User.query.get(data['user_id'])
+        db.session.flush() # Gets the ID without committing yet
+
+    # 3. Link to user if not already there
     if book not in user.collection:
         user.collection.append(book)
         db.session.commit()
-
-    return jsonify({"message": "Book added to collection!"})
+        return jsonify({"message": "Book added to your collection!"}), 200
+    
+    return jsonify({"message": "Book is already in your collection."}), 200
