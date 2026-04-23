@@ -11,13 +11,27 @@ def login():
     user = User.filter_by(username=data.get('username')).first()
 
 
-    #simple check atm, no hashing yet
     if user:
         return jsonify({
             "user_id": user.user_id,
             "username": user.username
         })
-    return jsonify({"error": "Invvalid credentials"}), 401
+    return jsonify({"error": "Invalid credentials"}), 401
+
+@main.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password') # no hashing yet
+
+    if User.query.filter_by(username=username).first():
+        return jsonify({"error": "User already exists"}), 400
+
+    new_user = User(username=username)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User registered"}), 201
 
 @main.route('/')
 def home():
