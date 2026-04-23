@@ -1,125 +1,72 @@
-# Library System Project
+# Library Management System
 
 ## Overview
 
-This project is a **full-stack library management system** that allows users to:
+This is a full-stack library management system. The application features a Python Tkinter desktop client that communicates with a Flask REST API to manage user authentication, book discovery, and personal collections.
 
-* Create accounts and log in
-* Search and view books
-* Borrow and return books
+The system follows a Client-Server architecture, ensuring that the user interface is completely decoupled from the database logic.
+Core Features
 
-The system is designed with **separation of concerns**, using:
+🔐 Authentication
 
-* A **User Database** for authentication
-* A **Book Database** (separate source) for library data
+    User Registration: Create a unique account directly through the UI.
 
----
+    Secure Login: Session-based interaction where the UI tracks the user_id. Password hashing soon to be added
 
-## Core Features (MVP)
+    Credential Validation: Server-side verification of usernames and passwords.
 
-### Authentication
+📚 Book Management
 
-* User registration (username + password)
-* Login / logout functionality
-* Secure password storage (hashed passwords)
+    Seeded Catalog: A pre-populated library of professional software engineering and data science texts.
 
-### Book Management
+    Smart Search: Local database querying with support for partial matches on titles and authors.
 
-* Search books by title, author, or genre
-* View book details
-* Borrow and return books
-* Track book availability
+    Hybrid Discovery: Capability to interface with the Google Books API for expanded search (optional toggle).
 
-### Integration
+🤝 Borrowing System
 
-* Backend connects to:
+    Personal Collections: Users can "Borrow" books, creating a persistent link in the database.
 
-  * User database (authentication)
-  * Book database (library data)
+    Many-to-Many Relationships: Managed via a junction table (user_books) to allow multiple users to interact with multiple books.
 
----
+    Real-time Returns: Remove books from your collection to update the library inventory.
 
-## Tech Stack
+Tech Stack
+Frontend (Desktop)
 
-### Frontend
+    Python 3.x
 
-* JavaScript
-* React
-* (Optional) Tailwind CSS or plain CSS
+    Tkinter / ttk: For a native, responsive desktop GUI.
 
-### Backend
+    Requests: For handling asynchronous API calls to the Flask backend.
 
-* Python
-* Flask (or FastAPI as an alternative)
+Backend (API)
 
-### Databases
+    Flask: RESTful API routing.
 
-* User DB: SQLite or PostgreSQL
-* Book DB: SQLite, PostgreSQL, or separate API
+    SQLAlchemy (ORM): To manage database models and relationships without raw SQL.
 
-### Authentication
+    SQLite: A lightweight, reliable relational database.
 
-* bcrypt for password hashing
-* Flask sessions or JWT for login sessions
+Project Structure
 
----
+.
+├── app/
+│   ├── __init__.py        # App factory & SQLAlchemy init
+│   ├── models.py          # Database Schema (User, Book, user_books)
+│   ├── routes.py          # API Endpoints (Login, Register, Search, Collection)
+│   └── services.py        # External API integration (Google Books)
+├── ui.py                  # Tkinter Desktop Application
+├── seed.py                # Database initialization and data seeding
+├── run.py                 # Entry point for the Flask server
+└── library.db             # SQLite Database file
 
-## Project Structure
+Database Schema
 
-### Backend
+The system utilizes three main tables to manage the data:
 
-```
-backend/
-│
-├── app.py
-├── routes/
-│   ├── auth.py
-│   ├── books.py
-│
-├── models/
-│   ├── user.py
-│   ├── book.py
-│
-├── db/
-│   ├── user_db.sqlite
-│   ├── book_db.sqlite
-│
-└── utils/
-    ├── auth_helpers.py
-```
+    User: Stores user_id, username, and password.
 
----
+    Book: Stores book_id, google_id, title, and authors.
 
-### Frontend
-
-```
-frontend/
-│
-├── src/
-│   ├── pages/
-│   │   ├── Login.jsx
-│   │   ├── Register.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── BookList.jsx
-│   │   ├── BookDetail.jsx
-│   │
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── BookCard.jsx
-│   │
-│   └── api/
-│       ├── client.js
-```
-
-
-
-proposal
-Came up with this groupwork proposal earlier today, we can discuss further on 4/2:
-
-Person 1: Entity relationship diagram and requirements define entities define relationships write assumptions
-
-Person 2: SQL schema/structure create tables keys constraints indexes
-
-Person 3: Database finder, tester for data and queries find/create db of books sample inserts test queries reports/search queries
-
-Person 4: UI Python tkinter app forms/buttons/search connect UI to SQLite Shared work testing making sure schema and UI match 
+    User_Books: A junction table linking user_id to book_id for the borrowing system.

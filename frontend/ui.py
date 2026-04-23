@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import sqlite3
 import requests
  
 BASE_URL = "http://127.0.0.1:5000"
@@ -64,26 +63,6 @@ def borrow_book_for_user(user, book):
     if response.status_code == 200:
         return True, "Book added to your collection!"
     return False, "Could not add book to collection."
-
-
-
-
-
-
-
-
-# Temporary implementations were removed, the functions just need to be redefined (hopefully) 
-
-
-# Borrow/return and google book implementation removed: 
-# borrow_book_for_user, return_book_for_user, and search_books_google functions
-
-
-# Auth implementation removed: 
-# account_db.sqlite
-# users(user_id, username UNIQUE, password_hash)
-# register_user and login_user functions
-
 
 
 
