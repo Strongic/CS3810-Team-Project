@@ -12,6 +12,7 @@ MarkupSafe==3.0.3
 python-dotenv==1.2.2
 requests==2.33.1
 SQLAlchemy==2.0.49
+tkinter-qpython==8.6.0.5
 typing_extensions==4.15.0
 urllib3==2.6.3
 Werkzeug==3.1.8
